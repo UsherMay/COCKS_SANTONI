@@ -11,7 +11,11 @@ import com.yvonbaptiste.todo.R
 
 class TaskListFragment : Fragment()
 {
-    private var taskList = listOf("Task 1", "Task 2", "Task 3")
+    private var taskList = listOf(
+        Task(id = "id_1", title = "Task 1", description = "description 1"),
+        Task(id = "id_2", title = "Task 2"),
+        Task(id = "id_3", title = "Task 3")
+    )
 
     private val adapter = TaskListAdapter()
 

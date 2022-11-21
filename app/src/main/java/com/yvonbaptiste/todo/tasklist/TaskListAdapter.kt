@@ -1,5 +1,6 @@
 package com.yvonbaptiste.todo.tasklist
 
+import android.app.ActivityManager.TaskDescription
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,14 +10,16 @@ import com.yvonbaptiste.todo.R
 
 class TaskListAdapter : RecyclerView.Adapter<TaskListAdapter.TaskViewHolder>() {
 
-    var currentList: List<String> = emptyList()
+    var currentList: List<Task> = emptyList()
 
     // on utilise `inner` ici afin d'avoir accès aux propriétés de l'adapter directement
     inner class TaskViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val textView = itemView.findViewById<TextView>(R.id.task_title)
-        fun bind(taskTitle: String) {
+        val textViewDescription = itemView.findViewById<TextView>(R.id.task_description)
+        fun bind(taskTitle: String, taskDescription: String) {
             // on affichera les données ici
             textView.text = taskTitle
+            textViewDescription.text = taskDescription
         }
     }
 
@@ -29,7 +32,7 @@ class TaskListAdapter : RecyclerView.Adapter<TaskListAdapter.TaskViewHolder>() {
     override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
         // TODO_DONE("Not yet implemented")
         // strange but so be it
-        holder.bind(position.toString())
+        holder.bind(currentList[position].title,currentList[position].description)
     }
 
     override fun getItemCount(): Int {
