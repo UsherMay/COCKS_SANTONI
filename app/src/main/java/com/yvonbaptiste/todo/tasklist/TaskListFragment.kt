@@ -5,9 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Adapter
+import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.yvonbaptiste.todo.R
+import java.util.*
 
 class TaskListFragment : Fragment()
 {
@@ -35,7 +37,24 @@ class TaskListFragment : Fragment()
         recyclerView.adapter = adapter
         // super.onViewCreated(view, savedInstanceState)
 
+        val button = view.findViewById<Button>(R.id.floatingActionButton1)
+        button.setOnClickListener { view ->
+            // Instanciation d'un objet task avec des données préremplies:
+            val newTask = Task(id = UUID.randomUUID().toString(), title = "Task ${taskList.size + 1}")
+            taskList = taskList + newTask
+
+
+
+
+        }
+
     }
+
+    /*
+    fun refreshAdatper(List<Task>: task){
+        adapter.currentList = task
+    }
+    */
 
 
 
