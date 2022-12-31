@@ -42,19 +42,18 @@ class TaskListFragment : Fragment()
             // Instanciation d'un objet task avec des données préremplies:
             val newTask = Task(id = UUID.randomUUID().toString(), title = "Task ${taskList.size + 1}")
             taskList = taskList + newTask
-
-
-
+            refreshAdatper()
 
         }
 
     }
 
-    /*
-    fun refreshAdatper(List<Task>: task){
-        adapter.currentList = task
+
+    fun refreshAdatper(){
+        adapter.currentList = taskList
+        adapter.notifyDataSetChanged()
     }
-    */
+
 
 
 
