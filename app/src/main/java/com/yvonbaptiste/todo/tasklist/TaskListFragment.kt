@@ -4,12 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Adapter
-import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.yvonbaptiste.todo.R
 import java.util.*
+import kotlin.collections.List
 
 class TaskListFragment : Fragment()
 {
@@ -35,25 +35,20 @@ class TaskListFragment : Fragment()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
         recyclerView.adapter = adapter
+        val fabView = view.findViewById<FloatingActionButton>(R.id.add_task_fab);
         // super.onViewCreated(view, savedInstanceState)
 
-        val button = view.findViewById<Button>(R.id.floatingActionButton1)
-        button.setOnClickListener { view ->
-            // Instanciation d'un objet task avec des données préremplies:
+        fabView.setOnClickListener {
             val newTask = Task(id = UUID.randomUUID().toString(), title = "Task ${taskList.size + 1}")
             taskList = taskList + newTask
-            refreshAdatper()
-
+            refreshAdapter()
         }
-
     }
 
-
-    fun refreshAdatper(){
+    fun refreshAdapter() {
         adapter.currentList = taskList
         adapter.notifyDataSetChanged()
     }
-
 
 
 
