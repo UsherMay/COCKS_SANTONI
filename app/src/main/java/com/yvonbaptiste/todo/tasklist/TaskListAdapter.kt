@@ -1,16 +1,29 @@
 package com.yvonbaptiste.todo.tasklist
 
-import android.app.ActivityManager.TaskDescription
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.yvonbaptiste.todo.R
 
-class TaskListAdapter : RecyclerView.Adapter<TaskListAdapter.TaskViewHolder>() {
+object TasksDiffCallback : DiffUtil.ItemCallback<Task>() {
+    override fun areItemsTheSame(oldItem: Task, newItem: Task) : Boolean {
+        return oldItem.id == newItem.id
+    }
 
-    var currentList: List<Task> = emptyList()
+    override fun areContentsTheSame(oldItem: Task, newItem: Task) : Boolean {
+        // comparaison: est-ce le même "contenu" ? => mêmes valeurs?
+        // (avec data class: simple égalité)
+        return oldItem == newItem;
+    }
+}
+
+class TaskListAdapter : ListAdapter<Task, TaskListAdapter.TaskViewHolder>(TasksDiffCallback) {
+
+    //var currentList: List<Task> = emptyList()
 
     // on utilise `inner` ici afin d'avoir accès aux propriétés de l'adapter directement
     inner class TaskViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -33,10 +46,5 @@ class TaskListAdapter : RecyclerView.Adapter<TaskListAdapter.TaskViewHolder>() {
         // TODO_DONE("Not yet implemented")
         // strange but so be it
         holder.bind(currentList[position].title,currentList[position].description)
-    }
-
-    override fun getItemCount(): Int {
-        // TODO_DONE("Not yet implemented")
-        return currentList.count()
     }
 }

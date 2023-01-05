@@ -8,6 +8,8 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.yvonbaptiste.todo.R
+import com.yvonbaptiste.todo.databinding.ActivityMainBinding
+import com.yvonbaptiste.todo.databinding.FragmentTaskListBinding
 import java.util.*
 import kotlin.collections.List
 
@@ -26,17 +28,22 @@ class TaskListFragment : Fragment()
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        //var binding = ActivityMainBinding.inflate(layoutInflater, container, false)
+        //val rootView = binding.root
         val rootView = inflater.inflate(R.layout.fragment_task_list, container, false)
-        adapter.currentList = taskList
+        adapter.submitList(taskList)
         return rootView
         //return super.onCreateView(inflater, container, savedInstanceState)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        //val binding = FragmentTaskListBinding.inflate(layoutInflater)
         val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
         recyclerView.adapter = adapter
+        // binding.recyclerView.adapter = adapter
         val fabView = view.findViewById<FloatingActionButton>(R.id.add_task_fab);
         // super.onViewCreated(view, savedInstanceState)
+
 
         fabView.setOnClickListener {
             val newTask = Task(id = UUID.randomUUID().toString(), title = "Task ${taskList.size + 1}")
@@ -46,7 +53,7 @@ class TaskListFragment : Fragment()
     }
 
     fun refreshAdapter() {
-        adapter.currentList = taskList
+        adapter.submitList(taskList)
         adapter.notifyDataSetChanged()
     }
 
