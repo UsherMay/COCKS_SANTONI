@@ -17,7 +17,22 @@ import java.util.*
 class TaskListFragment : Fragment()
 {
     private lateinit var binding: FragmentTaskListBinding
-    private val adapter = TaskListAdapter()
+    // private val adapter = TaskListAdapter()
+    val adapterListener : TaskListListener = object : TaskListListener {
+        override fun onClickEdit(task: Task) {
+            val intent = Intent(context, DetailActivity::class.java)
+            intent.putExtra("task", task)
+            editTask.launch(intent)
+        }
+        override fun onClickDelete(task: Task) {
+            // Supprimer la tâche
+            taskList = taskList - task
+            refreshAdapter()
+        }
+
+
+    }
+    val adapter = TaskListAdapter(adapterListener)
 
     private var taskList = listOf(
         Task(id = "id_1", title = "Task 1", description = "description 1"),
@@ -70,16 +85,16 @@ class TaskListFragment : Fragment()
 
         // "implémentation" de la lambda dans le fragment:
         //adapter.onClickDelete = { task ->
-            // Supprimer la tâche
-            //taskList = taskList - task
-            //refreshAdapter()
+        //    // Supprimer la tâche
+        //    taskList = taskList - task
+        //    refreshAdapter()
         //}
 
-        adapter.onClickEdit = {task ->
-            val intent = Intent(context, DetailActivity::class.java)
-            intent.putExtra("task", task)
-            editTask.launch(intent)
-        }
+        //adapter.onClickEdit = {task ->
+        //    val intent = Intent(context, DetailActivity::class.java)
+        //    intent.putExtra("task", task)
+        //    editTask.launch(intent)
+        //}
     }
 
     fun refreshAdapter() {

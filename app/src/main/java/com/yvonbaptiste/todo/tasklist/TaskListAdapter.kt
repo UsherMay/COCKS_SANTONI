@@ -3,6 +3,8 @@ package com.yvonbaptiste.todo.tasklist
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -20,8 +22,24 @@ object TasksDiffCallback : DiffUtil.ItemCallback<Task>() {
         return oldItem == newItem;
     }
 }
+interface TaskListListener {
+    fun onClickDelete(task: Task)
+    fun onClickEdit(task: Task)
+}
+/*
+class TaskListAdapter(val listener: TaskListListener) : ... {
+    // use: listener.onClickDelete(task)
+}
 
-class TaskListAdapter : ListAdapter<Task, TaskListAdapter.TaskViewHolder>(TasksDiffCallback) {
+class TaskListFragment : Fragment {
+    val adapterListener : TaskListListener = object : TaskListListener {
+        override fun onClickDelete(task: Task) {...}
+        override fun onClickEdit(task: Task) {...}
+    }
+    val adapter = TaskListAdapter(adapterListener)
+}
+*/
+class TaskListAdapter(val listener: TaskListListener) : ListAdapter<Task, TaskListAdapter.TaskViewHolder>(TasksDiffCallback) {
 
     //var currentList: List<Task> = emptyList()
     var onClickDelete: (Task) -> Unit = {}
@@ -31,10 +49,14 @@ class TaskListAdapter : ListAdapter<Task, TaskListAdapter.TaskViewHolder>(TasksD
     inner class TaskViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val textView = itemView.findViewById<TextView>(R.id.task_title)
         val textViewDescription = itemView.findViewById<TextView>(R.id.task_description)
-        fun bind(taskTitle: String, taskDescription: String) {
+        val editButton = itemView.findViewById<ImageButton>(R.id.task_edit_button)
+        val deleteButton = itemView.findViewById<ImageButton>(R.id.task_delete_button)
+        fun bind(task: Task) {
             // on affichera les données ici
-            textView.text = taskTitle
-            textViewDescription.text = taskDescription
+            textView.text = task.title
+            textViewDescription.text = task.description
+            editButton.setOnClickListener { listener.onClickEdit(task) }
+            deleteButton.setOnClickListener { listener.onClickDelete(task) }
         }
     }
 
@@ -47,7 +69,7 @@ class TaskListAdapter : ListAdapter<Task, TaskListAdapter.TaskViewHolder>(TasksD
     override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
         // TODO_DONE("Not yet implemented")
         // strange but so be it
-        holder.bind(currentList[position].title,currentList[position].description)
+        holder.bind(currentList[position])
         onClickDelete(currentList[position])
     }
 }
