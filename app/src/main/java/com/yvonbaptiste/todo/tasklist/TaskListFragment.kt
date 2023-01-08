@@ -27,6 +27,10 @@ class TaskListFragment : Fragment()
 
     private val createTask = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         // dans cette callback on récupèrera la task et on l'ajoutera à la liste
+        val task = result.data?.getSerializableExtra("task") as Task
+        taskList = taskList + task
+        refreshAdapter()
+
     }
 
     override fun onCreateView(
@@ -47,9 +51,9 @@ class TaskListFragment : Fragment()
             // startActivity(intent)
             createTask.launch(intent)
 
-            val newTask = Task(id = UUID.randomUUID().toString(), title = "Task ${taskList.size + 1}")
-            taskList = taskList + newTask
-            refreshAdapter()
+            // val newTask = Task(id = UUID.randomUUID().toString(), title = "Task ${taskList.size + 1}")
+            // taskList = taskList + newTask
+
 
         }
     }
