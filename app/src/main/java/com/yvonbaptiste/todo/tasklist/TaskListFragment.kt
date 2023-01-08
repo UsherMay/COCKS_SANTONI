@@ -33,6 +33,18 @@ class TaskListFragment : Fragment()
 
     }
 
+    private val editTask = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        // dans cette callback on récupèrera la task et on l'ajoutera à la liste
+        val task = result.data?.getSerializableExtra("task") as Task?
+        taskList = taskList.map {
+            if (it.id == task!!.id)
+                task
+            else it 
+        }
+        refreshAdapter()
+
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -62,19 +74,18 @@ class TaskListFragment : Fragment()
             //taskList = taskList - task
             //refreshAdapter()
         //}
+
+        adapter.onClickEdit = {task ->
+            val intent = Intent(context, DetailActivity::class.java)
+            intent.putExtra("task", task)
+            editTask.launch(intent)
+        }
     }
 
     fun refreshAdapter() {
         adapter.submitList(taskList)
         adapter.notifyDataSetChanged()
     }
-
-    /*
-    // "implémentation" de la lambda dans le fragment:
-    adapter.onClickDelete = { task ->
-    // Supprimer la tâche
-    }
-    */
 
 
 }

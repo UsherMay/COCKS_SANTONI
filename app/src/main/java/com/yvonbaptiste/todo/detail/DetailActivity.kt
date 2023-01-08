@@ -52,16 +52,16 @@ fun Detail(previousTask:Task, onValidate: (Task) -> Unit) {
         OutlinedTextField(
             label = { Text(text = "Title") },
             value = task.title,
-            onValueChange = { task = task.copy(title = "new title") },
+            onValueChange = { task = task.copy(title = it) },
         )
         OutlinedTextField(
             label = { Text(text = "Description") },
             value = task.description,
-            onValueChange = { task = task.copy(description = "new description") },
+            onValueChange = { task = task.copy(description = it) },
         )
         Button(onClick = {
             // val newTask = Task(id = UUID.randomUUID().toString(), title = "New Task !")
-            onValidate(previousTask)
+            onValidate(task)
         },shape = RoundedCornerShape(20.dp)
         ) {
             Text(text = "Button with elevation")
