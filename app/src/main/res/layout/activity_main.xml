@@ -19,7 +19,6 @@
         android:name="com.yvonbaptiste.todo.tasklist.TaskListFragment"
         android:id="@+id/fragment_tasklist"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:layout="@layout/fragment_task_list" />
+        android:layout_height="match_parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
