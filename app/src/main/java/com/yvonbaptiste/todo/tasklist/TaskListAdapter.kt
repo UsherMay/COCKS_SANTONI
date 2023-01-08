@@ -24,6 +24,7 @@ object TasksDiffCallback : DiffUtil.ItemCallback<Task>() {
 class TaskListAdapter : ListAdapter<Task, TaskListAdapter.TaskViewHolder>(TasksDiffCallback) {
 
     //var currentList: List<Task> = emptyList()
+    var onClickDelete: (Task) -> Unit = {}
 
     // on utilise `inner` ici afin d'avoir accès aux propriétés de l'adapter directement
     inner class TaskViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -46,5 +47,6 @@ class TaskListAdapter : ListAdapter<Task, TaskListAdapter.TaskViewHolder>(TasksD
         // TODO_DONE("Not yet implemented")
         // strange but so be it
         holder.bind(currentList[position].title,currentList[position].description)
+        onClickDelete(currentList[position])
     }
 }
