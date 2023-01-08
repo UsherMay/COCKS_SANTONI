@@ -54,8 +54,14 @@ class TaskListFragment : Fragment()
             // val newTask = Task(id = UUID.randomUUID().toString(), title = "Task ${taskList.size + 1}")
             // taskList = taskList + newTask
 
-
         }
+
+        // "implémentation" de la lambda dans le fragment:
+        //adapter.onClickDelete = { task ->
+            // Supprimer la tâche
+            //taskList = taskList - task
+            //refreshAdapter()
+        //}
     }
 
     fun refreshAdapter() {
