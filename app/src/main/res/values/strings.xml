@@ -2,4 +2,6 @@
     <string name="app_name">YvonBaptiste</string>
     <string name="title_activity_detail">DetailActivity</string>
     <string name="title_activity_grostest">grostest</string>
+    <string name="title_activity_user">UserActivity</string>
+    <string name="title_activity_test">test</string>
 </resources>

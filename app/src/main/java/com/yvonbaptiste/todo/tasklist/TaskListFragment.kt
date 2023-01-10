@@ -9,9 +9,11 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import coil.load
 import com.yvonbaptiste.todo.data.Api
 import com.yvonbaptiste.todo.databinding.FragmentTaskListBinding
 import com.yvonbaptiste.todo.detail.DetailActivity
+import com.yvonbaptiste.todo.user.UserActivity
 import kotlinx.coroutines.launch
 
 class TaskListFragment : Fragment()
@@ -49,17 +51,22 @@ class TaskListFragment : Fragment()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentTaskListBinding.inflate(inflater)
-        //adapter.submitList(taskList)
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        binding.recyclerView.adapter = adapter
 
         binding.addTaskFab.setOnClickListener {
             val intent = Intent(context, DetailActivity::class.java)
             createTask.launch(intent)
         }
+
+        binding.imageView.setOnClickListener {
+            val intent = Intent(context, UserActivity::class.java)
+            startActivity(intent)
+        }
+
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        binding.recyclerView.adapter = adapter
 
         lifecycleScope.launch { // on lance une coroutine car `collect` est `suspend`
             viewModel.tasksStateFlow.collect { newList ->
@@ -69,13 +76,6 @@ class TaskListFragment : Fragment()
             }
         }
     }
-/*
-    fun refreshAdapter() {
-        //adapter.submitList(taskList)
-        adapter.notifyDataSetChanged()
-    }
-
-*/
 
     override fun onResume() {
         super.onResume()
@@ -83,6 +83,7 @@ class TaskListFragment : Fragment()
         lifecycleScope.launch {
             val user = Api.userWebService.fetchUser().body()!!
             binding.topTextView.text = user.name
+            binding.imageView.load("https://goo.gl/gEgYUd")
         }
 
         viewModel.refresh() // on demande de rafraîchir les données sans attendre le retour directement

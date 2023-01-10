@@ -60,11 +60,10 @@ fun Detail(previousTask:Task, onValidate: (Task) -> Unit) {
             onValueChange = { task = task.copy(description = it) },
         )
         Button(onClick = {
-            // val newTask = Task(id = UUID.randomUUID().toString(), title = "New Task !")
             onValidate(task)
         },shape = RoundedCornerShape(20.dp)
         ) {
-            Text(text = "Button with elevation")
+            Text(text = "Save")
         }
     }
 
