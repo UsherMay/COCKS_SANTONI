@@ -1,15 +1,11 @@
 package com.yvonbaptiste.todo.tasklist
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.yvonbaptiste.todo.R
+import com.yvonbaptiste.todo.databinding.ItemTaskBinding
 
 object TasksDiffCallback : DiffUtil.ItemCallback<Task>() {
     override fun areItemsTheSame(oldItem: Task, newItem: Task) : Boolean {
@@ -22,54 +18,36 @@ object TasksDiffCallback : DiffUtil.ItemCallback<Task>() {
         return oldItem == newItem;
     }
 }
+
 interface TaskListListener {
     fun onClickDelete(task: Task)
     fun onClickEdit(task: Task)
 }
-/*
-class TaskListAdapter(val listener: TaskListListener) : ... {
-    // use: listener.onClickDelete(task)
-}
 
-class TaskListFragment : Fragment {
-    val adapterListener : TaskListListener = object : TaskListListener {
-        override fun onClickDelete(task: Task) {...}
-        override fun onClickEdit(task: Task) {...}
-    }
-    val adapter = TaskListAdapter(adapterListener)
-}
-*/
 class TaskListAdapter(val listener: TaskListListener) : ListAdapter<Task, TaskListAdapter.TaskViewHolder>(TasksDiffCallback) {
 
-    //var currentList: List<Task> = emptyList()
+    private lateinit var binding: ItemTaskBinding
+
+    /*
     var onClickDelete: (Task) -> Unit = {}
     var onClickEdit: (Task) -> Unit = {}
+    */
 
-    // on utilise `inner` ici afin d'avoir accès aux propriétés de l'adapter directement
-    inner class TaskViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val textView = itemView.findViewById<TextView>(R.id.task_title)
-        val textViewDescription = itemView.findViewById<TextView>(R.id.task_description)
-        val editButton = itemView.findViewById<ImageButton>(R.id.task_edit_button)
-        val deleteButton = itemView.findViewById<ImageButton>(R.id.task_delete_button)
+    inner class TaskViewHolder(binding: ItemTaskBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(task: Task) {
-            // on affichera les données ici
-            textView.text = task.title
-            textViewDescription.text = task.description
-            editButton.setOnClickListener { listener.onClickEdit(task) }
-            deleteButton.setOnClickListener { listener.onClickDelete(task) }
+            binding.taskTitle.text = task.title
+            binding.taskDescription.text = task.description
+            binding.taskEditButton.setOnClickListener { listener.onClickEdit(task) }
+            binding.taskDeleteButton.setOnClickListener { listener.onClickDelete(task) }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
-        // TODO_DONE("Not yet implemented")
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_task, parent, false)
-        return TaskViewHolder(itemView)
+        binding = ItemTaskBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return TaskViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
-        // TODO_DONE("Not yet implemented")
-        // strange but so be it
         holder.bind(currentList[position])
-        onClickDelete(currentList[position])
     }
 }
