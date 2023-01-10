@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import coil.load
+import com.yvonbaptiste.todo.R
 import com.yvonbaptiste.todo.data.Api
 import com.yvonbaptiste.todo.databinding.FragmentTaskListBinding
 import com.yvonbaptiste.todo.detail.DetailActivity
@@ -83,7 +84,9 @@ class TaskListFragment : Fragment()
         lifecycleScope.launch {
             val user = Api.userWebService.fetchUser().body()!!
             binding.topTextView.text = user.name
-            binding.imageView.load("https://goo.gl/gEgYUd")
+            binding.imageView.load(user.avatar) {
+                error(R.drawable.ic_launcher_background) // image par défaut en cas d'erreur
+            }
         }
 
         viewModel.refresh() // on demande de rafraîchir les données sans attendre le retour directement
