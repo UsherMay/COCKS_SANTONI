@@ -28,11 +28,6 @@ class TaskListAdapter(val listener: TaskListListener) : ListAdapter<Task, TaskLi
 
     private lateinit var binding: ItemTaskBinding
 
-    /*
-    var onClickDelete: (Task) -> Unit = {}
-    var onClickEdit: (Task) -> Unit = {}
-    */
-
     inner class TaskViewHolder(binding: ItemTaskBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(task: Task) {
             binding.taskTitle.text = task.title

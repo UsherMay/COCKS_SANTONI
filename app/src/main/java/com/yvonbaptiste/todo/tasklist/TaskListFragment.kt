@@ -88,8 +88,8 @@ class TaskListFragment : Fragment()
                 error(R.drawable.ic_launcher_background) // image par défaut en cas d'erreur
             }
         }
-
         viewModel.refresh() // on demande de rafraîchir les données sans attendre le retour directement
+        // Il manque un refresh pour la pdp ?
     }
 
 

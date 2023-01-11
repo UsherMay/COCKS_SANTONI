@@ -24,7 +24,6 @@ class TasksListViewModel : ViewModel() {
         }
     }
 
-    // à compléter plus tard:
     fun add(task: Task) {
         viewModelScope.launch {
             val response = webService.create(task) // TODO: appel réseau
