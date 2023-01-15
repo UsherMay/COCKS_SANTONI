@@ -65,12 +65,10 @@ class TaskListFragment : Fragment()
             startActivity(intent)
         }
 
-        //ADDED
         binding.topTextView.setOnClickListener {
             val intent = Intent(context, UserActivity::class.java)
             startActivity(intent)
         }
-        //ADDED_END
 
         return binding.root
     }

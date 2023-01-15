@@ -9,7 +9,6 @@ import kotlinx.coroutines.launch
 
 class UserViewModel : ViewModel() {
     private val webService = Api.userWebService
-
     val userStateFlow = MutableStateFlow<User>(User(name = "", email = ""))
 
     fun refresh() {
@@ -36,7 +35,7 @@ class UserViewModel : ViewModel() {
             // On a essayé plusieurs choses pour les lignes suivantes, mais rien ne marchait
             // La difficulté principale c'est que la réponse est Unit, du coup on ne savait
             // pas trop comment s'y prendre (userstateFlow.value attend un User)
-            val updatedUser = webService.fetchUser() as User
+            val updatedUser = webService.fetchUser().body()!!
             userStateFlow.value = User(name = updatedUser.name, email = updatedUser.email)
         }
     }

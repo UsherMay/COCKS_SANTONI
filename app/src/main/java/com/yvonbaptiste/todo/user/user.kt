@@ -6,9 +6,9 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class User(
     @SerialName("email")
-    val email: String,
+    var email: String,
     @SerialName("full_name")
-    val name: String,
+    var name: String,
     @SerialName("avatar_medium")
     val avatar: String? = null
 )

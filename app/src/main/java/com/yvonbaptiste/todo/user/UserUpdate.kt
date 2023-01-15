@@ -1,4 +1,3 @@
-//ADDED
 package com.yvonbaptiste.todo.user
 
 import kotlinx.serialization.SerialName

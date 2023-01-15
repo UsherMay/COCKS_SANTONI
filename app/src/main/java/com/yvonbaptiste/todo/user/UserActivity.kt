@@ -1,12 +1,16 @@
 package com.yvonbaptiste.todo.user
 
 import android.Manifest
+import android.app.AlertDialog
 import android.content.ContentValues
+import android.content.DialogInterface
+import android.content.DialogInterface.OnClickListener
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Patterns
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
@@ -14,14 +18,15 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
+import androidx.compose.material.Button
+import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
@@ -30,11 +35,13 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.lifecycleScope
 import coil.compose.AsyncImage
 import com.google.android.material.snackbar.Snackbar
+import com.yvonbaptiste.todo.R
 import com.yvonbaptiste.todo.data.Api
 import com.yvonbaptiste.todo.detail.ui.theme.YvonBaptisteTheme
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.toRequestBody
+
 
 class UserActivity : ComponentActivity() {
 
@@ -111,9 +118,49 @@ class UserActivity : ComponentActivity() {
             Edit User Settings
              */
 
+            fun isEmailValid(email: String): Boolean {
+                return Patterns.EMAIL_ADDRESS.matcher(email).matches()
+            }
+
+            fun dialogBuilder(editedUser : User, message: String, warning: String) {
+                val dialogBuilder = AlertDialog.Builder(this)
+
+                dialogBuilder.setMessage(message)
+                    // if the dialog is cancelable
+                    .setCancelable(false)
+                    .setPositiveButton("No", DialogInterface.OnClickListener {
+                            dialog, id -> dialog.cancel()
+                    })
+                    .setNegativeButton("Yes", DialogInterface.OnClickListener {
+                            dialog, id ->
+                        userViewModel.edit(editedUser)
+                        finish()
+                    })
+
+                val alert = dialogBuilder.create()
+                alert.setTitle(warning)
+                alert.show()
+            }
+
             fun editSettings(editedUser: User) {
-                userViewModel.edit(editedUser)
-                finish()
+                if(editedUser.name == "" && editedUser.email == "")
+                    showMessage("Settings haven't been changed")
+                else if(!isEmailValid(editedUser.email) && editedUser.email != "")
+                    showMessage("Email is not valid")
+                else if(editedUser.name == "" && isEmailValid(editedUser.email)) {
+                    val message = "You haven't updated your name, do you want to continue ?"
+                    val warning = "Name not updated"
+                    dialogBuilder(editedUser, message, warning)
+                }
+                else if(editedUser.name != "" && !isEmailValid(editedUser.email)) {
+                    val message = "You haven't updated your email, do you want to continue ?"
+                    val warning = "Email not updated"
+                    dialogBuilder(editedUser, message, warning)
+                }
+                else {
+                    userViewModel.edit(editedUser)
+                    finish()
+                }
             }
 
             YvonBaptisteTheme {
@@ -164,11 +211,12 @@ fun NewUser(uri: Uri?,
             text = "Profile picture",
             modifier = Modifier.padding(bottom = 12.dp)
         )
+
         AsyncImage(
             modifier = Modifier.fillMaxHeight(.2f),
-            // model = bitmap ?: uri,
             model = uri ?: user.avatar,
-            contentDescription = null
+            contentDescription = null,
+            error = painterResource(R.drawable.ic_action_name)
         )
         Button(
             onClick = { takePic() },
@@ -257,7 +305,8 @@ fun UserPreview() {
         OutlinedTextField(
             value = name ,
             onValueChange = { },
-            label = { Text(text = "Email")}
+            label = { Text(text = "Email")},
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
         )
         Button(
             onClick = { },
