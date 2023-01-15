@@ -59,10 +59,11 @@ fun Detail(previousTask:Task, onValidate: (Task) -> Unit) {
             value = task.description,
             onValueChange = { task = task.copy(description = it) },
         )
-        Button(onClick = {
-            onValidate(task)
-        },shape = RoundedCornerShape(20.dp)
-        ) {
+        Button(
+            onClick = { onValidate(task) },
+            shape = RoundedCornerShape(20.dp)
+        )
+        {
             Text(text = "Save")
         }
     }

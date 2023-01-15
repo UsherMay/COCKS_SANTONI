@@ -14,8 +14,7 @@ object TasksDiffCallback : DiffUtil.ItemCallback<Task>() {
 
     override fun areContentsTheSame(oldItem: Task, newItem: Task) : Boolean {
         // comparaison: est-ce le même "contenu" ? => mêmes valeurs?
-        // (avec data class: simple égalité)
-        return oldItem == newItem;
+        return oldItem.title == newItem.title && oldItem.description == newItem.description;
     }
 }
 

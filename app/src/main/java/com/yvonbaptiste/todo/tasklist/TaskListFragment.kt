@@ -15,12 +15,14 @@ import com.yvonbaptiste.todo.data.Api
 import com.yvonbaptiste.todo.databinding.FragmentTaskListBinding
 import com.yvonbaptiste.todo.detail.DetailActivity
 import com.yvonbaptiste.todo.user.UserActivity
+import com.yvonbaptiste.todo.user.UserViewModel
 import kotlinx.coroutines.launch
 
 class TaskListFragment : Fragment()
 {
     private lateinit var binding: FragmentTaskListBinding
     private val viewModel: TasksListViewModel by viewModels()
+    private val userViewModel: UserViewModel by viewModels()
 
     val adapterListener : TaskListListener = object : TaskListListener {
         override fun onClickEdit(task: Task) {
@@ -63,6 +65,13 @@ class TaskListFragment : Fragment()
             startActivity(intent)
         }
 
+        //ADDED
+        binding.topTextView.setOnClickListener {
+            val intent = Intent(context, UserActivity::class.java)
+            startActivity(intent)
+        }
+        //ADDED_END
+
         return binding.root
     }
 
@@ -74,6 +83,15 @@ class TaskListFragment : Fragment()
                 // cette lambda est executée à chaque fois que la liste est mise à jour dans le VM
                 // -> ici, on met à jour la liste dans l'adapter
                 adapter.submitList(newList)
+            }
+        }
+
+        lifecycleScope.launch {
+            userViewModel.userStateFlow.collect { newUser ->
+                binding.topTextView.text = newUser.name
+                binding.imageView.load(newUser.avatar) {
+                    error(R.drawable.ic_launcher_background) // image par défaut en cas d'erreur
+                }
             }
         }
     }
@@ -89,7 +107,7 @@ class TaskListFragment : Fragment()
             }
         }
         viewModel.refresh() // on demande de rafraîchir les données sans attendre le retour directement
-        // Il manque un refresh pour la pdp ?
+        userViewModel.refresh()
     }
 
 

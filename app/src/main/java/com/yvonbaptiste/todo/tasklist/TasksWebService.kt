@@ -1,6 +1,5 @@
-package com.yvonbaptiste.todo.data
+package com.yvonbaptiste.todo.tasklist
 
-import com.yvonbaptiste.todo.tasklist.Task
 import retrofit2.Response
 import retrofit2.http.*
 

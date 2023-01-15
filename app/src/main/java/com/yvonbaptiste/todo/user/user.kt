@@ -1,4 +1,4 @@
-package com.yvonbaptiste.todo.data
+package com.yvonbaptiste.todo.user
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

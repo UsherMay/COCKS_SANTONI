@@ -1,4 +1,4 @@
-package com.yvonbaptiste.todo.data
+package com.yvonbaptiste.todo.user
 
 import okhttp3.MultipartBody
 import retrofit2.Response
@@ -11,4 +11,7 @@ interface UserWebService {
     @Multipart
     @POST("sync/v9/update_avatar")
     suspend fun updateAvatar(@Part avatar: MultipartBody.Part): Response<User>
+
+    @PATCH("sync/v9/user")
+    suspend fun update(@Body user: UserUpdate): Response<Unit>
 }

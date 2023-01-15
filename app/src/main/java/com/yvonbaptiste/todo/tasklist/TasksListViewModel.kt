@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 class TasksListViewModel : ViewModel() {
     private val webService = Api.tasksWebService
 
-    public val tasksStateFlow = MutableStateFlow<List<Task>>(emptyList())
+    val tasksStateFlow = MutableStateFlow<List<Task>>(emptyList())
 
     fun refresh() {
         viewModelScope.launch {
@@ -39,7 +39,7 @@ class TasksListViewModel : ViewModel() {
 
     fun edit(task: Task) {
         viewModelScope.launch {
-            val response = webService.update(task, task.id) // TODO: appel réseau
+            val response = webService.update(task) // TODO: appel réseau
             if (!response.isSuccessful) {
                 Log.e("Network", "Error: ${response.raw()}")
                 return@launch
